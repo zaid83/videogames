@@ -21,10 +21,6 @@ class ArticleType extends AbstractType
                 'mapped' => false
             ])
             ->add('content')
-            ->add('author', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'pseudo',
-            ])
             ->add('status', EntityType::class, [
                 'class' => Status::class,
                 'choice_label' => 'name',

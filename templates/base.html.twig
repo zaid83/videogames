@@ -46,7 +46,7 @@
 		<!-- Navigation-->
 		<nav class="navbar sticky navbar-expand-lg navbar-light" id="mainNav">
 			<div class="container px-4 px-lg-5">
-				<a class="navbar-brand" href="index.php">
+				<a class="navbar-brand" href="{{path('home')}}">
 					VIDEOGAMEZ</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 					Menu
@@ -78,7 +78,7 @@
 
 							<ul class="dropdown-menu">
 								<li class="nav-item">
-									<a class="nav-link px-lg-3 py-3 py-lg-4" href="article/postArticle">Nouvel Article</a>
+									<a class="nav-link px-lg-3 py-3 py-lg-4" href="{{path('add_article')}}">Nouvel Article</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link px-lg-3 py-3 py-lg-4" href="article/listUser">Mes Articles</a>

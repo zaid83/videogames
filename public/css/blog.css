@@ -1,5 +1,6 @@
 body {
-    background-color: white;
+    background-color: black;
+    color: white;
 }
 
 .post-preview {
@@ -16,6 +17,15 @@ body {
     height: 100%;
 }
 
+.post-preview a:link,
+.post-preview a:visited {
+    color: white;
+}
+
+.post-preview a:hover {
+    color: coral;
+}
+
 .post-content {
     width: 100%;
 }
@@ -25,9 +35,7 @@ body {
     font-size: 2rem
 }
 
-header.masthead {
-    background-image: url('../assets/img/bg.jpg');
-}
+header.masthead {}
 
 .post-user {
     color: coral;

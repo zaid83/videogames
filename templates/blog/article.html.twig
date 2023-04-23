@@ -17,135 +17,136 @@
 						{{article.createdAt | date('d/m/Y')}}
 					</span><br>
 					<span class="meta">
-						<?php
-                    if (isset($_SESSION['id'])) {
-                        if ($check_like->rowCount() == 1) { ?>
-							<a href="index.php?controller=article&task=likeArticle&type=1&id=<?= htmlspecialchars($article['id_article']) ?>">
-								<i style="color:red" class="fa fa-heart" aria-hidden="true"></i>
-								J'aime
-							</a>
-						<?php } else { ?>
-							<a href="index.php?controller=article&task=likeArticle&type=1&id=<?= htmlspecialchars($article['id_article']) ?>">
-								<i class="fa fa-heart" aria-hidden="true"></i>
-								J'aime
-							</a>
-						<?php } ?>
-						<?php if ($check_dislike->rowCount() == 1) { ?>
-							<a href="index.php?controller=article&task=likeArticle&type=2&id=<?= htmlspecialchars($article['id_article']) ?>">
-								<i style="color:blue" class="fa fa-thumbs-down" aria-hidden="true"></i>
-								J'aime pas
-							</a>
-						<?php } else { ?>
-							<a href="index.php?controller=article&task=likeArticle&type=2&id=<?= htmlspecialchars($article['id_article']) ?>">
-								<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-								J'aime pas
-							</a>
-						<?php } ?>
-						<?php if ($checkfav->rowCount() == 1) { ?>
-							<a href="index.php?controller=favourite&task=addOrRemove&id=<?= htmlspecialchars($article['id_article']) ?>">
-								<i style="color:red" class="fa fa-minus" aria-hidden="true"></i>
-								<span style="color:red">Retirer des favoris</span>
-							<?php } else { ?>
-								<a href="index.php?controller=favourite&task=addOrRemove&id=<?= htmlspecialchars($article['id_article']) ?>">
-									<i style="color:green" class="fa fa-plus" aria-hidden="true"></i>
-									<span style="color:green">Ajouter aux favoris</span>
-								<?php } ?>
+						{% if app.user %}
+							{% if liked %}
+								<a href="{{path('unlike_article', {'id':article.id})}}">
+									<i style="color:red" class="fa fa-heart" aria-hidden="true"></i>
+									J'aime
+								</a>
+							{% else %}
+								<a href="{{path('like_article', {'id':article.id})}}">
+									<i class="fa fa-heart" aria-hidden="true"></i>
+									J'aime
+								</a>
+							{% endif %}
+							{% if disliked %}
+								<a href="{{path('undislike_article', {'id':article.id})}}">
+									<i style="color:blue" class="fa fa-thumbs-down" aria-hidden="true"></i>
+									J'aime pas
+								</a>
+							{% else %}
+								<a href="{{path('dislike_article', {'id':article.id})}}">
+									<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+									J'aime pas
+								</a>
+							{% endif %}
+							{% if favourited %}
+								<a href="{{path('unfav_article', {'id':article.id})}}">
+									<i style="color:red" class="fa fa-minus" aria-hidden="true"></i>
+									<span style="color:red">Retirer des favoris</span>
+								{% else %}
+									<a href="{{path('fav_article', {'id':article.id})}}">
+										<i style="color:green" class="fa fa-plus" aria-hidden="true"></i>
+										<span style="color:green">Ajouter aux favoris</span>
+									{% endif %}
 
-							</a>
-							<span>
-								<i class="fa fa-thumbs-up count"></i>
-								<?= $likes ?>
+								</a>
+								<span>
+									<i class="fa fa-thumbs-up count"></i>
+									{{ article.likes | length }}
+								</span>
+								<span>
+									<i class="fa fa-thumbs-down count"></i>
+									{{ article.dislikes | length }}
+								</span>
 							</span>
-							<span>
-								<i class="fa fa-thumbs-down count"></i>
-								<?= $dislikes ?>
-							</span>
-						</span>
-					<?php } ?>
+						{% endif %}
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- Post Content-->
-	<article class="mb-4">
-		<div class="container px-4 px-lg-5">
-			<div class="row gx-4 gx-lg-5 justify-content-center">
-				<div class="col-md-10 col-lg-8 col-xl-7">
-					<p>
-						{{article.content}}
-					</p>
+		<!-- Post Content-->
+		<article class="mb-4">
+			<div class="container px-4 px-lg-5">
+				<div class="row gx-4 gx-lg-5 justify-content-center">
+					<div class="col-md-10 col-lg-8 col-xl-7">
+						<p>
+							{{article.content}}
+						</p>
+					</div>
 				</div>
 			</div>
-		</div>
-	</article>
+		</article>
 
 
-	<section class="content-item" id="comments">
-		<div class="container px-4 px-lg-5">
-			<div class="row gx-4 gx-lg-5 justify-content-center">
-				<div class="col-sm-8">
-					{% if app.user  %}
-						<form method="POST" action="">
+		<section class="content-item" id="comments">
+			<div class="container px-4 px-lg-5">
+				<div class="row gx-4 gx-lg-5 justify-content-center">
+					<div class="col-sm-8">
+						{% if app.user  %}
+							{{form_start(formComment)}}
 							<h3 class="pull-left">Poster un commentaire</h3>
 
 							<fieldset>
 								<div class="row">
 									<div class="col-sm-3 col-lg-2 hidden-xs">
-										<img class="img-responsive" src="{{asset('uploads/user_img/default.jpg')}}" alt="img de {{ app.user.pseudo }} ">
+										<img class="img-responsive" src="{{asset('uploads/user_img/' ~ app.user.avatar)}}" alt="img de {{ app.user.pseudo }} ">
 									</div>
 									<div class="form-group col-xs-12 col-sm-9 col-lg-10">
-										<textarea class="form-control" id="message" placeholder="Votre message" required="" name="commentaire"></textarea>
+										{{form_row(formComment.content, {
+              						  'attr' : {
+										"class" : "form-control",
+										"placeholder" : "Ecriver votre message",
+										},
+										"label": false
+									  })
+									}}
 									</div>
 									<button type="submit" name="submit_commentaire" class="btn btn-sm btn-primary pull-right">Envoyer</button>
 								</div>
 							</fieldset>
 
-						</form>
+							{{form_end(formComment)}}
 
-					{% endif %}
-
-					<?php if (isset($msg)) { ?>
-						<div class="alert alert-danger" role="alert">
-							<?= $msg; ?>
-							<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-						</div>
-					<?php } ?>
-					<h3>
-						<?= $nbcomments['nbComments'] ?>
-						Commentaires
-					</h3>
+						{% endif %}
 
 
-					{% for comment in article.comments %}
-						<div class="media">
-							<a class="pull-left" href="#"><img class="media-object" src="{{comment.author.avatar}}" alt=""></a>
-							<div class="media-body">
-								<h4 class="media-heading">
-									{{comment.author.pseudo}}
-								</h4>
-								<p>
-									{{comment.content}}
-								</p>
+						<h3>
+							{{ article.comments | length }}
+							Commentaires
+						</h3>
+
+
+						{% for comment in article.comments %}
+							<div class="media">
+								<a class="pull-left" href="#"><img class="media-object" src="{{asset('uploads/user_img/' ~ comment.author.avatar)}}" alt="image de "></a>
+								<div class="media-body">
+									<h4 class="media-heading">
+										{{comment.author.pseudo}}
+									</h4>
+									<p>
+										{{comment.content}}
+									</p>
+								</div>
 							</div>
-						</div>
-						<div class="media-footer">
-							<ul class="list-unstyled list-inline media-detail pull-left">
-								<li>
-									<i class="fa fa-calendar"></i>
-									{{comment.createdAt | date('d/m/Y')}}
-								</li>
-							</ul>
-							<?php if($_SESSION['id'] == $comment['id_user']) { ?>
-								<button class="btn btn-danger">
-									<a href="index.php?controller=comment&task=delCommentById&supprime_coms=<?= $comment['id_comment'] ?>">Supprimer
-									</a>
-								</button>
-							<?php } ?>
-						</div>
-					{% endfor %}
+							<div class="media-footer">
+								<ul class="list-unstyled list-inline media-detail pull-left">
+									<li>
+										<i class="fa fa-calendar"></i>
+										{{comment.createdAt | date('d/m/Y')}}
+									</li>
+								</ul>
+								<?php if($_SESSION['id'] == $comment['id_user']) { ?>
+									<button class="btn btn-danger">
+										<a href="index.php?controller=comment&task=delCommentById&supprime_coms=<?= $comment['id_comment'] ?>">Supprimer
+										</a>
+									</button>
+								<?php } ?>
+							</div>
+						{% endfor %}
 
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
-{% endblock %}
+		</section>
+	{% endblock %}
