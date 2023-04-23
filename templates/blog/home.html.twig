@@ -1,8 +1,47 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<h1>Bienvenue dans le blog du {{title}}</h1>
-<p>loremkmjfkqsjdklsqdkqsjsdklqjdklsqjdlksqjkldjsqkldjksqljdklsqjkdljsqkldjlksqjdqsj</p>
-<p>loremkmjfkqsjdklsqdkqsjsdklqjdklsqjdlksqjkldjsqkldjksqljdklsqjkdljsqkldjlksqjdqsj</p>
-<p>loremkmjfkqsjdklsqdkqsjsdklqjdklsqjdlksqjkldjsqkldjksqljdklsqjkdljsqkldjlksqjdqsj</p>
-<p>loremkmjfkqsjdklsqdkqsjsdklqjdklsqjdlksqjkldjsqkldjksqljdklsqjkdljsqkldjlksqjdqsj</p>
+	<header class="masthead">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="site-heading">
+						<h1>GAMEZ</h1>
+						<span class="subheading">Un blog sur les jeux videos</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<div class="container px-4 px-lg-5">
+		<div class="row gx-4 gx-lg-5 ">
+			<div class="col-md-10 col-lg-8 col-xl-7">
+				{% for article in articles  %}
+					<!-- Post preview-->
+					<div class="post-preview">
+						<img src="{{ article.img }}" alt="img de l'article ">
+						<div class="post-content">
+							<a href="{{path('one_article', {'id':article.id})}}">
+								<h2 class="post-title">
+									{{ article.title }}
+								</h2>
+							</a>
+							<p class="post-meta">
+								Posté par
+								<span class="post-user">
+									{{article.author.pseudo}}
+								</span>
+								le
+								{{ article.createdAt | date("d/m/Y") }}
+							</p>
+						</div>
+					</div>
+					<br>
+
+				{% endfor %}
+
+				<hr class="my-4"/>
+
+			</div>
+		</div>
+	</div>
 {% endblock %}

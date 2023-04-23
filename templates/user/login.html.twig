@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!
+{% endblock %}
+
+{% block body %}
+	<div class="container-fluid">
+		<form action="{{path('user_login')}}" method="POST" class=" register-form">
+			<h2 style="color:coral; text-align:center;">Connexion</h2>
+			<div class="row">
+				<div class="col-md-4 col-sm-4 col-lg-4">
+					<label for="email">EMAIL</label>
+					<input name="_username" class="form-control" type="email">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 col-sm-4 col-lg-4">
+					<label for="password">PASSWORD</label>
+					<input name="_password" class="form-control" type="password">
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+					<button class="btn btn-default regbutton" type="submit">
+						<a href="{{path('user_register')}}">Inscription</a>
+					</button>
+
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+					<button class="btn btn-default logbutton" type="submit">Se connecter</button>
+				</div>
+			</div>
+			<a href="user/forgotP" style='color:white;'>Mot de passe oublié</a>
+		</div>
+
+	</form>
+</div>{% endblock %}

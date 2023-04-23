@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="container-fluid register login">
+		<div class="register-form">
+			{{form_start(formRegister)}}
+
+			<div class="row">
+				<div class="col-12">
+					<br>
+					<br>
+					<br>
+					<br>
+					<h2 style="color:coral; text-align:center;">Inscription</h2>
+					<label for="firstName">PSEUDO</label>
+					{{form_row(formRegister.pseudo, {
+                'attr' : {"class" : "form-control"},
+				'label' : false
+				})
+			    }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<label for="email">EMAIL</label>
+					{{form_row(formRegister.mail, {
+                'attr' : {"class" : "form-control"},
+				'label' : false
+				})
+			    }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<label for="password">PASSWORD</label>
+
+					{{form_row(formRegister.password, {
+                'attr' : {"class" : "form-control"},
+				'label' : false
+				})
+			    }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
+					<label for="password2">RETAPER VOTRE PASSWORD</label>
+					{{form_row(formRegister.confirm_password, {
+                'attr' : {"class" : "form-control"},
+				'label' : false
+				})
+			    }}
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+					<button class="btn btn-default regbutton" type="submit" name="submit">S'inscrire</button>
+
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+					<button class="btn btn-default logbutton">
+						<a href="{{path('user_login')}}">Connexion</a>
+					</button>
+				</div>
+
+			</div>
+			<a href="user/forgotP" style='color:white;'>Mot de passe oublié</a>
+
+			{{form_end(formRegister)}}
+		</div>
+	</div>
+{% endblock %}

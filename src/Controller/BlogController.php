@@ -6,21 +6,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Repository\ArticlesRepository;
+
+
+
+
+
 class BlogController extends AbstractController
 {
-    #[Route('/blog', name: 'app_blog')]
-    public function index(): Response
+    #[Route('/', name: 'home')]
+    public function index(ArticlesRepository $repo): Response
     {
-        return $this->render('blog/index.html.twig', [
-            'controller_name' => 'Le GOAT',
+
+        $articles = $repo->findAll();
+        return $this->render('blog/home.html.twig', [
+            'title' => 'Accueil', 'articles' => $articles
         ]);
-    }
-
-
-    /**
-     * @Route("/", name ="home")
-     */
-    public function home() {
-        return $this->render('blog/home.html.twig', ['title' => 'GOAT', 'age' => 21]);
     }
 }

@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="container-fluid">
+		{{form_start(formArticle)}}
+		<div class="register-form">
+			<div class="row">
+				<h2 style="color:coral;">Poster un article</h2>
+				<div class="col-md-4 col-sm-4 col-lg-4">
+					<label for="title">TITRE</label>
+					{{form_row(formArticle.title, {
+                'attr' : {"class" : "form-control"},
+				'label' : false
+				})
+			    }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 col-sm-4 col-lg-4">
+					<label for="img_article">IMAGE</label>
+					{{form_row(formArticle.imgFile,{
+                'attr' : {"class" : "form-control"},
+				'label' : false
+					 })
+					 }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-sm-8 col-lg-8">
+					<label for="content">CONTENU</label>
+					{{form_row(formArticle.content,{
+                'attr' : {"class" : "form-control"},
+				'label' : false
+					 })
+					 }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-sm-8 col-lg-8">
+					<label for="content">AUTEUR</label>
+					{{form_row(formArticle.author,{
+                'attr' : {"class" : "form-control"},
+				'label' : false
+					 })
+					 }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-sm-8 col-lg-8">
+					<label for="content">STATUT</label>
+					{{form_row(formArticle.status,{
+                'attr' : {"class" : "form-control"},
+				'label' : false
+					 })
+					 }}
+				</div>
+			</div>
+			<hr>
+			<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+				<button class="btn btn-default logbutton" type="submit" name="submit">
+					{% if editMode %}
+						Editer article
+					{% else %}
+						Nouvel article
+					{% endif %}
+				</button>
+			</div>
+			<p style="color:white;">
+				<?= $message ?>
+			</p>
+		</div>
+		{{form_end(formArticle)}}
+		<p style="color:white;">
+			<?= $message ?>
+		</p>
+	</div>
+{% endblock %}
