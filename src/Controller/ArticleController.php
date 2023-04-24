@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Repository\FavouriteRepository;
 use App\Repository\LikeRepository;
+use App\Repository\StatusRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\Mapping\Id;
@@ -25,12 +26,13 @@ class ArticleController extends AbstractController
      * @Route("article/add", name ="add_article")
      * @Route("article/edit/{id}", name ="edit_article")
      */
-    public function form(Articles $article = null, Request $request, EntityManagerInterface $manager)
+    public function form(Articles $article = null, Request $request, EntityManagerInterface $manager, StatusRepository $repo)
     {
+        $validMode = false;
         if (!$article) {
             $article = new Articles();
         }
-
+        $status = $repo->find(1);
 
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -48,7 +50,11 @@ class ArticleController extends AbstractController
                 $destination,
                 $newFilename
             );
+
+
+
             $article->setImg($newFilename);
+            $article->setStatus($status);
             $article->setAuthor($this->getUser());
             $manager->persist($article);
             $manager->flush();
@@ -58,7 +64,8 @@ class ArticleController extends AbstractController
         return $this->render('blog/form.html.twig', [
             'title' => 'Creer un article',
             'formArticle' => $form->createView(),
-            'editMode' => $article->getid() !== null
+            'editMode' => $article->getid() !== null,
+            'validMode' => $validMode
 
         ]);
     }
@@ -82,8 +89,6 @@ class ArticleController extends AbstractController
         $favourited = $repof->findOneBy(['article' => $article, 'author' => $user]);
 
 
-
-
         //postComment
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
@@ -104,5 +109,50 @@ class ArticleController extends AbstractController
             'disliked' =>  $disliked == true,
             'favourited' => $favourited == true
         ]);
+    }
+ 
+     /**
+     * @Route("article/validate/", name ="valid_article")
+     * 
+     */
+    public function publishArticle(Articles $article = null, Request $request, EntityManagerInterface $manager, StatusRepository $repo){
+  
+        $validMode =true;
+        $status = $repo->find(1);
+
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$article->getid()) {
+                $article->setCreatedAt(new \DateTimeImmutable());
+            }
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form['imgFile']->getData();
+            $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/article_image';
+            $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $newFilename = $originalFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+            $uploadedFile->move(
+                $destination,
+                $newFilename
+            );
+
+
+            
+            $article->setImg($newFilename);
+            $article->setStatus($status);
+            $article->setAuthor($this->getUser());
+            $manager->persist($article);
+            $manager->flush();
+
+            return $this->redirectToRoute('one_article', ['id' => $article->getId()]);
+        }
+        return $this->render('blog/form.html.twig', [
+            'title' => 'Creer un article',
+            'formArticle' => $form->createView(),
+            'validMode' => $validMode
+
+        ]);
+
     }
 }

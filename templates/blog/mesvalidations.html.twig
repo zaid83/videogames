@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<header class="masthead" style="background-image: url('{{asset('assets/img/bg.jpg')}}')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="site-heading">
+						<h1>VALIDATIONS</h1>
+						<span class="subheading">Une liste de validations</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<div class="container px-4 px-lg-5">
+		<div class="row gx-4 gx-lg-5 ">
+			<div class="col-md-10 col-lg-8 col-xl-7">
+				{% if valids %}
+					{% for valid in valids  %}
+						<!-- Post preview-->
+						<div class="post-preview">
+							<img src="{{asset('uploads/article_image/' ~ valid.img)}}" alt="img de l'article ">
+							<div class="post-content">
+								<a href="{{path('edit_article', {'id':valid.id})}}">
+									<h2 class="post-title">
+										{{ valid.title }}
+									</h2>
+								</a>
+								<p class="post-meta">
+									Posté par
+									<span class="post-user">
+										{{valid.author.pseudo}}
+									</span>
+									le
+									{{ valid.createdAt | date("d/m/Y") }}
+								</p>
+							</div>
+						</div>
+						<br>
+
+					{% endfor %}
+				{% else %}
+					<p>Aucun article à valider</p>
+				{% endif %}
+
+				<hr class="my-4"/>
+
+			</div>
+		</div>
+	</div>
+{% endblock %}

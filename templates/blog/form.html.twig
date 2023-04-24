@@ -24,6 +24,18 @@
 					 }}
 				</div>
 			</div>
+			{% if validMode %}
+				<div class="row">
+					<div class="col-md-4 col-sm-4 col-lg-4">
+						<label for="img_article">COMMENTAIRES</label>
+						{{form_row(formArticle.signals,{
+                'attr' : {"class" : "form-control"},
+				'label' : false
+					 })
+					 }}
+					</div>
+				</div>
+			{% endif %}
 			<div class="row">
 				<div class="col-md-8 col-sm-8 col-lg-8">
 					<label for="content">CONTENU</label>
@@ -34,21 +46,11 @@
 					 }}
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-8 col-sm-8 col-lg-8">
-					<label for="content">STATUT</label>
-					{{form_row(formArticle.status,{
-                'attr' : {"class" : "form-control"},
-				'label' : false
-					 })
-					 }}
-				</div>
-			</div>
 			<hr>
 			<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
 				<button class="btn btn-default logbutton" type="submit" name="submit">
 					{% if editMode %}
-						Editer article
+						Publier article
 					{% else %}
 						Nouvel article
 					{% endif %}

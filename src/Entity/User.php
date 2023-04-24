@@ -35,8 +35,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(
         min: 5,
         max: 12,
-        minMessage: 'Votre titre doit avoir {{ limit }} caractères au minimum',
-        maxMessage: 'Votre titre doit pas dépasser {{ limit }} caractères',
+        minMessage: 'Votre pseudo doit avoir {{ limit }} caractères au minimum',
+        maxMessage: 'Votre pseudo doit pas dépasser {{ limit }} caractères',
     )]
     private ?string $pseudo = null;
 

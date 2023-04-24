@@ -39,20 +39,25 @@ class ArticlesRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Articles[] Returns an array of Articles objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+
+  /**
+     * @return Articles[]
+     */
+    public function findAllByUser($user): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT a
+            FROM App\Entity\Articles a
+            JOIN App\Entity\User u
+            WHERE u.id = :user'
+        )->setParameter('user', $user);
+
+        // returns an array of Product objects
+        return $query->getResult();
+    }
+}
 
 //    public function findOneBySomeField($value): ?Articles
 //    {
@@ -63,4 +68,4 @@ class ArticlesRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-}
+

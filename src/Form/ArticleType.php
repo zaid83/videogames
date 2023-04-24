@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 
 class ArticleType extends AbstractType
 {
@@ -21,9 +23,8 @@ class ArticleType extends AbstractType
                 'mapped' => false
             ])
             ->add('content')
-            ->add('status', EntityType::class, [
-                'class' => Status::class,
-                'choice_label' => 'name',
+            ->add('signals', TextType::class, [
+                'mapped' =>false
             ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Form\RegistrationType;
+use App\Repository\RoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,11 +27,12 @@ class UserController extends AbstractController
     }
 
     #[Route('/register', name: 'user_register')]
-    public function register(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $passwordHasher): Response
+    public function register(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $passwordHasher, RoleRepository $repo): Response
     {
         $user = new User();
+        $role = $repo->find(1);
 
-
+         
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
 
@@ -43,6 +45,7 @@ class UserController extends AbstractController
                 $plainPassword
             );
             $user->setPassword($hashedPassword);
+            $user->setRole($role);
 
             $manager->persist($user);
             $manager->flush();
