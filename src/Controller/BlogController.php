@@ -18,7 +18,7 @@ class BlogController extends AbstractController
     public function index(ArticlesRepository $repo): Response
     {
 
-        $articles = $repo->findAll();
+        $articles = $repo->findBy(['status' => 1]);
         return $this->render('blog/home.html.twig', [
             'title' => 'Accueil', 'articles' => $articles
         ]);

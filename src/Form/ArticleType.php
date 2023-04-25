@@ -22,10 +22,7 @@ class ArticleType extends AbstractType
             ->add('imgFile', FileType::class, [
                 'mapped' => false
             ])
-            ->add('content')
-            ->add('signals', TextType::class, [
-                'mapped' =>false
-            ]);
+            ->add('content');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 	<div class="container-fluid">
-		{{form_start(formArticle)}}
+		{{form_start(formValid)}}
 		<div class="register-form">
 			<div class="row">
-				<h2 style="color:coral;">Poster un article</h2>
+				<h2 style="color:coral;">Valider un article</h2>
 				<div class="col-md-4 col-sm-4 col-lg-4">
 					<label for="title">TITRE</label>
-					{{form_row(formArticle.title, {
+					{{form_widget(formValid.title, {
                 'attr' : {"class" : "form-control"},
 				'label' : false
 				})
@@ -18,7 +18,16 @@
 			<div class="row">
 				<div class="col-md-4 col-sm-4 col-lg-4">
 					<label for="img_article">IMAGE</label>
-					{{form_row(formArticle.imgFile,{
+					<img src="{{asset('uploads/article_image/' ~ article.img)}}" width="200" alt="image de l'article">
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-md-8 col-sm-8 col-lg-8">
+
+					<label for="content">CONTENU</label>
+					{{form_widget(formValid.content,{
                 'attr' : {"class" : "form-control"},
 				'label' : false
 					 })
@@ -26,11 +35,11 @@
 				</div>
 			</div>
 
-
 			<div class="row">
 				<div class="col-md-8 col-sm-8 col-lg-8">
-					<label for="content">CONTENU</label>
-					{{form_row(formArticle.content,{
+
+					<label for="content">COMMENTAIRES</label>
+					{{form_widget(formValid.signals,{
                 'attr' : {"class" : "form-control"},
 				'label' : false
 					 })
@@ -40,20 +49,10 @@
 			<hr>
 			<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
 				<button class="btn btn-default logbutton" type="submit" name="submit">
-					{% if editMode %}
-						Publier article
-					{% else %}
-						Nouvel article
-					{% endif %}
+					Publier article
 				</button>
 			</div>
-			<p style="color:white;">
-				<?= $message ?>
-			</p>
 		</div>
-		{{form_end(formArticle)}}
-		<p style="color:white;">
-			<?= $message ?>
-		</p>
+		{{form_end(formValid)}}
 	</div>
 {% endblock %}

@@ -38,12 +38,12 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $plainPassword = $user->getPassword();
-            $user->setAvatar("default.jpeg");
+            $plainPassword = $user->getPassword();  
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
                 $plainPassword
             );
+            $user->setAvatar("default.jpg");
             $user->setPassword($hashedPassword);
             $user->setRole($role);
 

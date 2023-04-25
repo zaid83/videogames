@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Repository\ArticlesRepository;
 use App\Repository\FavouriteRepository;
 use App\Repository\LikeRepository;
 use App\Repository\StatusRepository;
@@ -112,45 +113,36 @@ class ArticleController extends AbstractController
     }
  
      /**
-     * @Route("article/validate/", name ="valid_article")
+     * @Route("article/validate/{id}", name ="valid_article")
      * 
      */
     public function publishArticle(Articles $article = null, Request $request, EntityManagerInterface $manager, StatusRepository $repo){
   
-        $validMode =true;
         $status = $repo->find(1);
+       
 
-        $form = $this->createForm(ArticleType::class, $article);
+        $form = $this->createFormBuilder($article)
+        ->add('title')
+        ->add('content')
+        ->add('signals')
+        ->getForm();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!$article->getid()) {
-                $article->setCreatedAt(new \DateTimeImmutable());
-            }
-            /** @var UploadedFile $uploadedFile */
-            $uploadedFile = $form['imgFile']->getData();
-            $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/article_image';
-            $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $newFilename = $originalFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
-            $uploadedFile->move(
-                $destination,
-                $newFilename
-            );
-
-
-            
-            $article->setImg($newFilename);
+   
             $article->setStatus($status);
-            $article->setAuthor($this->getUser());
             $manager->persist($article);
             $manager->flush();
 
             return $this->redirectToRoute('one_article', ['id' => $article->getId()]);
         }
-        return $this->render('blog/form.html.twig', [
+        return $this->render('blog/formValidate.html.twig', [
             'title' => 'Creer un article',
-            'formArticle' => $form->createView(),
-            'validMode' => $validMode
+            'formValid' => $form->createView(),
+            'article' => $article,
+            'editMode' => $article->getid() !== null,
+          
 
         ]);
 
