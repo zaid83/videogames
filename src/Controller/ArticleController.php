@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Articles;
+
 use App\Repository\FavouriteRepository;
 use App\Repository\LikeRepository;
 use App\Repository\StatusRepository;
@@ -17,6 +17,7 @@ use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Form\ValidType;
 use App\Repository\DislikeRepository;
+use App\Entity\Articles;
 
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

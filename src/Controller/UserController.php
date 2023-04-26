@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
-
-
-
+use App\Form\UserType;
 
 class UserController extends AbstractController
 {
@@ -32,13 +30,13 @@ class UserController extends AbstractController
         $user = new User();
         $role = $repo->find(1);
 
-         
+
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $plainPassword = $user->getPassword();  
+            $plainPassword = $user->getPassword();
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
                 $plainPassword
@@ -60,5 +58,39 @@ class UserController extends AbstractController
     #[Route('/logout', name: 'user_logout')]
     public function logout()
     {
+    }
+
+    #[Route('/profile/{id}', name: 'user_profil')]
+    public function editprofile(User $user, Request $request, EntityManagerInterface $manager)
+    {
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+            /** @var UploadedFile $uploadedFile */
+            $userId = $user->getId();
+            $uploadedFile = $form['imgFile']->getData();
+            $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/avatar';
+            $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $newFilename = $userId . '.' . $uploadedFile->guessExtension();
+            $uploadedFile->move(
+                $destination,
+                $newFilename
+            );
+
+            $user->setAvatar($newFilename);
+
+            $manager->persist($user);
+            $manager->flush();
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('user/profil.html.twig', [
+            'title' => 'Mon profil',
+            'formUser' => $form->createView(),
+            'user' => $user,
+        ]);
     }
 }

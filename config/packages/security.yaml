@@ -32,7 +32,9 @@ security:
 
             form_login:
                     login_path: user_login
-                    check_path: user_login
+                    check_path:
+                     user_login
+                     user_profil
 
             logout:
                 path: user_logout
