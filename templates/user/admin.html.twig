@@ -1,0 +1,250 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<header class="masthead">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="site-heading">
+						<h1>
+							Administrateur
+						</h1>
+						<span class="subheading">
+							Page admin
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<main class="main">
+		<h2 class="titleAdmin" align="center">
+			Crud Administrateur
+		</h2>
+		<select class="form-select form-select-lg mb-3" id="selectList" aria-label=".form-select-sm example" onchange="selectOption()">
+			<option selected>Selectionne ta liste</option>
+			<option value="1">Articles</option>
+			<option value="2">Utilisateurs</option>
+			<option value="3">Commentaires</option>
+		</select>
+		<section id="tab-articles" class="section-list">
+			<h2 align="center">
+				Liste des articles(
+				<?= $nbArticles; ?>)
+			</h2>
+			<br>
+			<div class="table-responsive">
+				<table class="table ">
+					<thead class="thead-dark bg-primary">
+						<tr>
+							<th scope="col">Articles ID</th>
+							<th scope="col">Titre</th>
+							<th scope="col">Date</th>
+							<th scope="col">Editer</th>
+							<th scope="col">Supprimer</th>
+							<th scope="col">Etat</th>
+							<th scope="col">Signals</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						{% for article in articles  %}
+							<!-- Modal -->
+							<div class="modal fade" id="articleModal<?= $listarticle['id_article'] ?>" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Suppresion</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											Voulez-vous vraiment supprimer ?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+											<button type="button" class="btn btn-danger">
+												<a href="article/delArticle/<?= $listarticle['id_article'] ?>">Supprimer</a>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<tr>
+								<th scope="row">
+									{{article.id}}
+								</th>
+								<td>
+									{{article.title}}
+								</td>
+								<td>
+									{{article.createdAt | date('d/m/Y')}}
+								</td>
+
+								<td>
+									<a href="{{path('edit_article', {'id':article.id})}}" class="btn btn-primary">Editer</a>
+								</td>
+								<td>
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#articleModal<?= $listarticle['id_article'] ?>">
+										Supprimer
+									</button>
+
+
+								</td>
+								<td>
+									{{article.status.name}}
+								</td>
+								<td>
+									<?= {{article.signals}} ?>
+								</td>
+
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section id="tab-users" class="section-list">
+			<h2 align=" center">
+				Liste des utilisateurs (
+				<?= $nbUsers; ?>)
+			</h2>
+			<br>
+			<div class="table-responsive">
+				<table class="table ">
+					<thead class="thead-dark bg-primary">
+						<tr>
+							<th scope="col">Users ID</th>
+							<th scope="col">Pseudos</th>
+							<th scope="col">Emails</th>
+							<th scope="col">Editer</th>
+							<th scope="col">Supprimer</th>
+							<th scope="col">Rôles</th>
+
+
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in users  %}
+							<!-- Modal -->
+							<div class="modal fade" id="userModal<?= $listuser['id'] ?>" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Suppresion</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											Voulez-vous vraiment supprimer ?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+											<button type="button" class="btn btn-danger">
+												<a href="user/delUser/<?= $listuser['id_article'] ?>">Supprimer</a>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<tr>
+								<th scope="row">
+									{{user.id}}
+								</th>
+								<td>
+									{{user.pseudo}}
+								</td>
+								<td>
+									{{user.mail}}
+								</td>
+
+								<td>
+									<a href="{{path('user_profil', {'id':app.user.id})}}" class="btn btn-primary">Editer</a>
+								</td>
+								<td>
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#userModal<?= $listuser['id'] ?>">
+										Supprimer
+									</button>
+
+								</td>
+								<td>
+									{{user.role.name}}
+								</td>
+
+
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section id="tab-coms" class="section-list">
+			<h2 align=" center">
+				Liste des commentaires(
+				<?= $nbComs; ?>)
+			</h2>
+			<br>
+			<div class="table-responsive">
+				<table class="table ">
+					<thead class="thead-dark bg-primary">
+						<tr>
+							<th scope="col">Titre article</th>
+							<th scope="col">Pseudos</th>
+							<th scope="col">Commentaires</th>
+							<th scope="col">Date</th>
+							<th scope="col">Supprimer</th>
+
+
+						</tr>
+					</thead>
+					<tbody>
+						{% for comment in comments %}
+							<!-- Modal -->
+							<div class="modal fade" id="commentModal<?= $listCom['id_comment'] ?>" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Suppresion</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											Voulez-vous vraiment supprimer ?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+											<button type="button" class="btn btn-danger">
+												<a href="comment/delComment/<?= $listCom['id_comment'] ?>">Supprimer</a>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<tr>
+								<th scope="row">
+									{{comment.article.title}}
+								</th>
+								<td>
+									{{comment.user.pseudo}}
+								</td>
+								<td>
+									{{comment.content}}
+								</td>
+
+								<td>
+									{{comment.createdAt | date('d/m/Y')}}
+								</td>
+
+								<td>
+
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#commentModal<?= $listCom['id_comment'] ?>">
+										Supprimer
+									</button>
+
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</main>
+{% endblock %}

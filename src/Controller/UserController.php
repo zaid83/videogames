@@ -13,6 +13,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\ArticlesRepository;
+use App\Repository\CommentRepository;
+use App\Repository\UserRepository;
 
 class UserController extends AbstractController
 {
@@ -91,6 +94,23 @@ class UserController extends AbstractController
             'title' => 'Mon profil',
             'formUser' => $form->createView(),
             'user' => $user,
+        ]);
+    }
+
+
+    #[Route('/admin', name: 'admin')]
+    public function admin(ArticlesRepository $repoA, UserRepository $repoU, CommentRepository $repoC)
+    {
+        $articles = $repoA->findAll();
+        $users = $repoU->findAll();
+        $comments = $repoC->findAll();
+
+
+        return $this->render('user/admin.html.twig', [
+            'title' => 'Admin',
+            'users' => $users,
+            'articles' => $articles,
+            'comments' => $comments
         ]);
     }
 }
