@@ -33,6 +33,7 @@ class Articles
         maxSize: '4096k',
         extensions: ['jpg', 'gif', 'jpeg', 'webp', 'png'],
         extensionsMessage: 'Veuillez uploader un fichier jpg, gif, ou png',
+        groups: ["create"]
     )]
     private ?string $img = null;
 
