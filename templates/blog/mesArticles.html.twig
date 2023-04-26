@@ -70,7 +70,7 @@
 							</td>
 
 							<td>
-								<a href="article/editArticle/<?= htmlspecialchars($listarticle['id_article']) ?>" class="btn btn-primary">Editer</a>
+								<a href="{{path('edit_article', {'id':article.id})}}" class="btn btn-primary">Editer</a>
 							</td>
 							<td>
 								{# <?php if (isset($_SESSION['id']) && $_SESSION['role'] > 1) { ?> #}

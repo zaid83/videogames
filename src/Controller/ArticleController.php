@@ -17,8 +17,10 @@ use App\Entity\Articles;
 use App\Entity\Comment;
 use App\Form\ArticleType;
 use App\Form\CommentType;
+use App\Form\ValidationType;
 use App\Repository\DislikeRepository;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ArticleController extends AbstractController
 {
@@ -29,10 +31,39 @@ class ArticleController extends AbstractController
      */
     public function form(Articles $article = null, Request $request, EntityManagerInterface $manager, StatusRepository $repo)
     {
-        $validMode = false;
-        if (!$article) {
-            $article = new Articles();
+
+        if($article) {
+            $form = $this->createForm(ArticleType::class, $article);
+            $form->handleRequest($request);
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                if (!$article->getid()) {
+                    $article->setCreatedAt(new \DateTimeImmutable());
+                }
+                /** @var UploadedFile $uploadedFile */
+                $uploadedFile = $form['imgFile']->getData();
+                $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/article_image';
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+                $uploadedFile->move(
+                    $destination,
+                    $newFilename
+                );
+    
+    
+    
+                $article->setImg($newFilename);
+                $article->setAuthor($this->getUser());
+                $manager->persist($article);
+                $manager->flush();
+    
+                return $this->redirectToRoute('one_article', ['id' => $article->getId()]);
+            }
         }
+
+        else {
+            $article = new Articles();
+        
         $status = $repo->find(1);
 
         $form = $this->createForm(ArticleType::class, $article);
@@ -62,11 +93,12 @@ class ArticleController extends AbstractController
 
             return $this->redirectToRoute('one_article', ['id' => $article->getId()]);
         }
+    }
         return $this->render('blog/form.html.twig', [
             'title' => 'Creer un article',
             'formArticle' => $form->createView(),
             'editMode' => $article->getid() !== null,
-            'validMode' => $validMode
+       
 
         ]);
     }
@@ -121,16 +153,12 @@ class ArticleController extends AbstractController
         $status = $repo->find(1);
        
 
-        $form = $this->createFormBuilder($article)
-        ->add('title')
-        ->add('content')
-        ->add('signals')
-        ->getForm();
-
+        $form = $this->createForm(ValidationType::class);
         $form->handleRequest($request);
+  
 
         if ($form->isSubmitted() && $form->isValid()) {
-   
+        
             $article->setStatus($status);
             $manager->persist($article);
             $manager->flush();
