@@ -49,7 +49,7 @@
 					<tbody>
 						{% for article in articles  %}
 							<!-- Modal -->
-							<div class="modal fade" id="articleModal<?= $listarticle['id_article'] ?>" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal fade" id="articleModal{{article.id}}" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
@@ -62,7 +62,7 @@
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
 											<button type="button" class="btn btn-danger">
-												<a href="article/delArticle/<?= $listarticle['id_article'] ?>">Supprimer</a>
+												<a href="{{path('del_article', {'id':article.id})}}">Supprimer</a>
 											</button>
 										</div>
 									</div>
@@ -83,7 +83,7 @@
 									<a href="{{path('edit_article', {'id':article.id})}}" class="btn btn-primary">Editer</a>
 								</td>
 								<td>
-									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#articleModal<?= $listarticle['id_article'] ?>">
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#articleModal{{article.id}}">
 										Supprimer
 									</button>
 
@@ -126,7 +126,7 @@
 					<tbody>
 						{% for user in users  %}
 							<!-- Modal -->
-							<div class="modal fade" id="userModal<?= $listuser['id'] ?>" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal fade" id="userModal{{user.id}}" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
@@ -139,7 +139,7 @@
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
 											<button type="button" class="btn btn-danger">
-												<a href="user/delUser/<?= $listuser['id_article'] ?>">Supprimer</a>
+												<a href="{{path('del_user', {'id':user.id})}}">Supprimer</a>
 											</button>
 										</div>
 									</div>
@@ -160,7 +160,7 @@
 									<a href="{{path('user_profil', {'id':app.user.id})}}" class="btn btn-primary">Editer</a>
 								</td>
 								<td>
-									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#userModal<?= $listuser['id'] ?>">
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#userModal{{user.id}}">
 										Supprimer
 									</button>
 
@@ -199,7 +199,7 @@
 					<tbody>
 						{% for comment in comments %}
 							<!-- Modal -->
-							<div class="modal fade" id="commentModal<?= $listCom['id_comment'] ?>" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal fade" id="commentModal{{comment.id}}" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
@@ -212,7 +212,7 @@
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
 											<button type="button" class="btn btn-danger">
-												<a href="comment/delComment/<?= $listCom['id_comment'] ?>">Supprimer</a>
+												<a href="{{path('del_comment', {'id':comment.id})}}">Supprimer</a>
 											</button>
 										</div>
 									</div>
@@ -223,7 +223,7 @@
 									{{comment.article.title}}
 								</th>
 								<td>
-									{{comment.user.pseudo}}
+									{{comment.article.author.pseudo}}
 								</td>
 								<td>
 									{{comment.content}}
@@ -235,7 +235,7 @@
 
 								<td>
 
-									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#commentModal<?= $listCom['id_comment'] ?>">
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#commentModal{{comment.id}}">
 										Supprimer
 									</button>
 
